@@ -46,7 +46,7 @@ export function parse(path: string): PathSegments {
       // If the number of parameters is wrong, fail
       if (argsParsed.length < length[relType]) {
         throw new Error(`malformed path data: ${match.trim()}`)
-      };
+      }
       // push command and args and continue if more args are expected
       data.push([type, ...argsParsed.splice(0, length[relType])] as Segment);
     } while (length[relType] && argsParsed.length >= length[relType])
