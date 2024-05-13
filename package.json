@@ -21,7 +21,7 @@
     "scale",
     "parse"
   ],
-  "author": "Tom Bigelajzen",
+  "author": "Tom Bigelajzen <svgutils@tombigel.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tombigel/svg-path-utils/issues"
