@@ -34,30 +34,22 @@ export function parse(path: string): PathSegments {
     let relType = type.toLowerCase() as RelSegmentType;
     const argsParsed = parseValues(args);
 
-    // If implicit lineTo after M
+    // If special case of implicit LineTo after M fake the next L
     if (relType === 'm' && argsParsed.length > 2) {
       data.push([type, ...argsParsed.splice(0, 2)] as MoveSegment);
-
       relType = 'l';
       type = type === 'm' ? 'l' : 'L';
     }
 
-    if (argsParsed.length < length[relType]) {
-        throw new Error(`malformed path data: ${match.trim()}`)
-    };
-
-    while (argsParsed.length >= length[relType]) {
-      if (argsParsed.length === length[relType]) {
-        data.push([type, ...argsParsed] as Segment);
-        return match;
-      }
-
-      // we need to check length again
+    // Loop for implicit commands
+    do {
+      // If the number of parameters is wrong, fail
       if (argsParsed.length < length[relType]) {
         throw new Error(`malformed path data: ${match.trim()}`)
       };
+      // push command and args and continue if more args are expected
       data.push([type, ...argsParsed.splice(0, length[relType])] as Segment);
-    }
+    } while (length[relType] && argsParsed.length >= length[relType])
 
     return match;
   });
