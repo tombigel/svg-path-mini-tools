@@ -8,3 +8,4 @@ api.key
 .yarn/
 yarn-error.log
 dist/
+coverage/
