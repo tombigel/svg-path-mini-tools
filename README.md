@@ -1,12 +1,13 @@
-# svg-path-utils
+# SVG Path Mini Tools
 
 ## A collection of minimalistic SVG path manipulation utilities
+
+[![npm version](https://badge.fury.io/js/svg-path-mini-tools.svg)](https://badge.fury.io/js/svg-path-mini-tools)
 
 ### Usage
 
 ```js
 import {scalePath} from 'svg-path-mini-tools'
-
 const scaled = scalePath('M20, 20 L40, 40 Z', 2, 2) // 'M20,20L40,40Z'
 ```
 
@@ -48,13 +49,13 @@ The input is a path string, and the output is a similar string but with all poin
 
 ### Based on the work of [@jkroso](https://github.com/jkroso) and [@michaelrhodes](https://github.com/michaelrhodes)
 
-### Types Based on work from the [DefinitelyTyped](https://github.com/DefinitelyTyped) project  
-
 <https://github.com/jkroso/serialize-svg-path>  
 <https://github.com/jkroso/parse-svg-path>  
 <https://github.com/jkroso/abs-svg-path>  
 <https://github.com/jkroso/rel-svg-path>  
-
+and  
 <https://github.com/michaelrhodes/scale-svg-path>  
+
+### Types Based on work from the [DefinitelyTyped](https://github.com/DefinitelyTyped) project  
 
 <https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/abs-svg-path>  
