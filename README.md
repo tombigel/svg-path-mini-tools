@@ -1,14 +1,22 @@
 # svg-path-utils
+
 ## A collection of minimalistic SVG path manipulation utilities
-### Based on the work of [@jkroso](https://github.com/jkroso) and [@michaelrhodes](https://github.com/michaelrhodes):  
 
-https://github.com/michaelrhodes/scale-svg-path  
-https://github.com/jkroso/serialize-svg-path  
-https://github.com/jkroso/parse-svg-path  
-https://github.com/jkroso/abs-svg-path  
-https://github.com/jkroso/rel-svg-path  
+### Based on the work of [@jkroso](https://github.com/jkroso) and [@michaelrhodes](https://github.com/michaelrhodes)  
 
-**License: MIT**
+### Types Based on work from the[DefinitelyTyped](https://github.com/DefinitelyTyped) project
+
+<https://github.com/michaelrhodes/scale-svg-path>  
+<https://github.com/jkroso/serialize-svg-path>  
+<https://github.com/jkroso/parse-svg-path>  
+<https://github.com/jkroso/abs-svg-path>  
+<https://github.com/jkroso/rel-svg-path>  
+
+<https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/abs-svg-path>
+
+### License
+
+[MIT](./LICENSE)
 
 ### API
 

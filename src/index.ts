@@ -1,10 +1,22 @@
-// path-utils.ts
-import { Segment, ParsedPath, ScaleFactors } from './types';
+import {
+  PathSegments,
+  ScaleFactors,
+  MoveSegment,
+  SegmentType,
+  VerticalSegment,
+  ArcSegment,
+  Segment,
+  AbsSegment,
+  RelSegmentType,
+  RelSegment,
+  HorizontalSegment,
+  AbsSegmentType,
+} from './types';
 
 /**
  * expected argument lengths
  */
-const length: { [key: string]: number } = { a: 7, c: 6, h: 1, l: 2, m: 2, q: 4, s: 4, t: 2, v: 1, z: 0 };
+const length: { [key in RelSegmentType]: number } = { a: 7, c: 6, h: 1, l: 2, m: 2, q: 4, s: 4, t: 2, v: 1, z: 0 };
 /**
  * segment pattern
  */
@@ -16,68 +28,173 @@ const number: RegExp = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/gi;
 
 const parseValues = (args: string): number[] => (args.match(number) || []).map(Number);
 
-export function parse(path: string): ParsedPath {
-    const data: ParsedPath = [];
-    path.replace(segment, (_, command: string, args: string) => {
-        let type = command.toLowerCase();
-        let argsParsed = parseValues(args);
+export function parse(path: string): PathSegments {
+  const data: PathSegments = [];
+  path.replace(segment, (match, type: SegmentType, args: string) => {
+    let relType = type.toLowerCase() as RelSegmentType;
+    let argsParsed = parseValues(args);
 
-        if (type == 'm' && argsParsed.length > 2) {
-            data.push([command].concat(argsParsed.splice(0, 2)));
-            type = 'l';
-            command = command == 'm' ? 'l' : 'L';
-        }
+    if (relType === 'm' && argsParsed.length > 2) {
+      data.push([type, ...argsParsed.splice(0, 2)] as MoveSegment);
+      relType = 'l';
+      type = type === 'm' ? 'l' : 'L';
+    }
 
-        while (true) {
-            if (argsParsed.length == length[type]) {
-                argsParsed.unshift(command);
-                return data.push(argsParsed);
-            }
-            if (argsParsed.length < length[type]) throw new Error('malformed path data');
-            data.push([command].concat(argsParsed.splice(0, length[type])));
-        }
-    });
-    return data;
+    while (true) {
+      if (argsParsed.length === length[relType]) {
+        data.push([type, ...argsParsed] as Segment);
+        return match;
+      }
+      if (argsParsed.length < length[relType]) throw new Error(`malformed path data: ${match}`);
+      data.push([type, ...argsParsed.splice(0, length[relType])] as Segment);
+    }
+  });
+  return data;
 }
 
-export function serialize(segments: ParsedPath): string {
-    return segments.reduce((str, seg) => str + seg[0] + seg.slice(1).join(','), '');
+export function serialize(segments: PathSegments): string {
+  return segments.reduce((str, segment) => str + segment[0] + segment.slice(1).join(','), '');
 }
 
-export function scaleSegments(segments: ParsedPath, { sx, sy }: ScaleFactors): ParsedPath {
-    return segments.map((segment) => {
-        const name = segment[0].toLowerCase();
+export function scaleSegments(segments: PathSegments, { sx, sy }: ScaleFactors): PathSegments {
+  return segments.map<Segment>((segment) => {
+    const [type, ...args] = segment;
 
-        if (name === 'v') {
-            segment[1] *= sy;
-            return segment;
-        }
+    if (type.toLowerCase() === 'v') {
+      (segment as VerticalSegment)[1] *= sy;
+      return segment;
+    }
 
-        if (name === 'a') {
-            segment[1] *= sx;
-            segment[2] *= sy;
-            segment[6] *= sx;
-            segment[7] *= sy;
-            return segment;
-        }
+    if (type.toLowerCase() === 'a') {
+      const arcSegment = segment as ArcSegment;
+      arcSegment[1] *= sx;
+      arcSegment[2] *= sy;
+      arcSegment[6] *= sx;
+      arcSegment[7] *= sy;
+      return arcSegment;
+    }
 
-        return segment.map((val, i) => {
-            if (!i) {
-                return val;
-            }
-            return (val *= i % 2 ? sx : sy);
-        });
-    });
+    return [type, ...args.map((val: number, i: number) => (val *= i % 2 ? sx : sy))] as Segment;
+  });
 }
 
-export function relative(path: ParsedPath): ParsedPath {
-    // Implementation...
+export function relative(path: PathSegments): RelSegment[] {
+  let startX = 0;
+  let startY = 0;
+  let x = 0;
+  let y = 0;
+
+  return path.map((segment) => {
+    const [type, ...args] = segment;
+    const relType = type.toLowerCase() as RelSegmentType;
+    segment = [relType, ...args] as RelSegment;
+
+    // is absolute
+    if (type != relType) {
+      segment[0] = relType;
+      switch (type) {
+        case 'A':
+          (segment as ArcSegment)[6] -= x;
+          (segment as ArcSegment)[7] -= y;
+          break;
+        case 'V':
+          (segment as VerticalSegment)[1] -= y;
+          break;
+        case 'H':
+          (segment as HorizontalSegment)[1] -= x;
+          break;
+        default:
+          for (let i = 1; i < segment.length; ) {
+            (segment[i++] as number) -= x;
+            (segment[i++] as number) -= y;
+          }
+      }
+    }
+
+    // update cursor state
+    switch (relType) {
+      case 'z':
+        x = startX;
+        y = startY;
+        break;
+      case 'h':
+        x += (segment as HorizontalSegment)[1];
+        break;
+      case 'v':
+        y += (segment as VerticalSegment)[1];
+        break;
+      case 'm':
+        x += (segment as MoveSegment)[1];
+        y += (segment as MoveSegment)[2];
+        startX += (segment as MoveSegment)[1];
+        startY += (segment as MoveSegment)[2];
+        break;
+      default:
+        x += segment[segment.length - 2] as number;
+        y += segment[segment.length - 1] as number;
+    }
+
+    return segment;
+  });
 }
 
-export function absolute(path: ParsedPath): ParsedPath {
-    // Implementation...
+export function absolute(path: PathSegments): AbsSegment[] {
+  let startX = 0;
+  let startY = 0;
+  let x = 0;
+  let y = 0;
+
+  return path.map((segment) => {
+    const [type, ...args] = segment;
+    const absType = type.toUpperCase() as AbsSegmentType;
+    segment = [absType, ...args] as AbsSegment;
+
+    // is relative
+    if (type != absType) {
+      segment[0] = absType;
+      switch (type) {
+        case 'a':
+          (segment as ArcSegment)[6] += x;
+          (segment as ArcSegment)[7] += y;
+          break;
+        case 'v':
+          (segment as VerticalSegment)[1] += y;
+          break;
+        case 'h':
+          (segment as HorizontalSegment)[1] += x;
+          break;
+        default:
+          for (let i = 1; i < segment.length; ) {
+            (segment[i++] as number) += x;
+            (segment[i++] as number) += y;
+          }
+      }
+    }
+
+    // update cursor state
+    switch (absType) {
+      case 'Z':
+        x = startX;
+        y = startY;
+        break;
+      case 'H':
+        x = (segment as HorizontalSegment)[1];
+        break;
+      case 'V':
+        y = (segment as VerticalSegment)[1];
+        break;
+      case 'M':
+        [x, y] = [(segment as MoveSegment)[1], (segment as MoveSegment)[2]];
+        [startX, startY] = [x, y];
+        break;
+      default:
+        [x, y] = [segment[segment.length - 2] as number, segment[segment.length - 1] as number];
+    }
+
+    return segment;
+  });
 }
 
 export function scalePath(path: string, sx: number, sy: number): string {
-    return serialize(scaleSegments(parse(path), { sx, sy }));
+  return serialize(scaleSegments(parse(path), { sx, sy }));
 }
