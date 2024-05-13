@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tombigel/svg-path-utils.git"
+    "url": "git+https://github.com/tombigel/svg-path-mini-tools.git"
   },
   "keywords": [
     "svg",
@@ -24,9 +24,9 @@
   "author": "Tom Bigelajzen <svgutils@tombigel.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tombigel/svg-path-utils/issues"
+    "url": "https://github.com/tombigel/svg-path-mini-tools/issues"
   },
-  "homepage": "https://github.com/tombigel/svg-path-utils#readme",
+  "homepage": "https://github.com/tombigel/svg-path-mini-tools#readme",
   "devDependencies": {
     "@eslint/js": "^9.2.0",
     "@types/jest": "^29.5.12",
