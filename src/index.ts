@@ -20,11 +20,11 @@ const length: { [key in RelSegmentType]: number } = { a: 7, c: 6, h: 1, l: 2, m:
 /**
  * segment pattern
  */
-const segment: RegExp = /([astvzqmhlc])([^astvzqmhlc]*)/gi;
+const segment = /([astvzqmhlc])([^astvzqmhlc]*)/gi;
 /**
  * number pattern
  */
-const number: RegExp = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/gi;
+const number = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/gi;
 
 const parseValues = (args: string): number[] => (args.match(number) || []).map(Number);
 
@@ -32,22 +32,34 @@ export function parse(path: string): PathSegments {
   const data: PathSegments = [];
   path.replace(segment, (match, type: SegmentType, args: string) => {
     let relType = type.toLowerCase() as RelSegmentType;
-    let argsParsed = parseValues(args);
+    const argsParsed = parseValues(args);
 
+    // If implicit lineTo after M
     if (relType === 'm' && argsParsed.length > 2) {
       data.push([type, ...argsParsed.splice(0, 2)] as MoveSegment);
+
       relType = 'l';
       type = type === 'm' ? 'l' : 'L';
     }
 
-    while (true) {
+    if (argsParsed.length < length[relType]) {
+        throw new Error(`malformed path data: ${match.trim()}`)
+    };
+
+    while (argsParsed.length >= length[relType]) {
       if (argsParsed.length === length[relType]) {
         data.push([type, ...argsParsed] as Segment);
         return match;
       }
-      if (argsParsed.length < length[relType]) throw new Error(`malformed path data: ${match}`);
+
+      // we need to check length again
+      if (argsParsed.length < length[relType]) {
+        throw new Error(`malformed path data: ${match.trim()}`)
+      };
       data.push([type, ...argsParsed.splice(0, length[relType])] as Segment);
     }
+
+    return match;
   });
   return data;
 }

@@ -41,7 +41,7 @@ export type Segment =
     | FollowingQuadraticCurveSegment
     | ArcSegment;
 
-export type RelSegment = 
+export type RelSegment =
     | RelMoveSegment
     | RelLineSegment
     | RelHorizontalSegment
@@ -69,4 +69,4 @@ export type RelSegmentType = RelSegment[0];
 export type AbsSegmentType = AbsSegment[0];
 export type SegmentType = Segment[0];
 export type PathSegments = Segment[];
-export type ScaleFactors = { sx: number, sy: number };
+export interface ScaleFactors { sx: number, sy: number };

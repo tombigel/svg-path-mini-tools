@@ -7,3 +7,4 @@ api.key
 .DS_Store
 .yarn/
 yarn-error.log
+dist/
