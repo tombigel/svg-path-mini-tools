@@ -1,5 +1,5 @@
 {
-  "name": "svg-path-utils",
+  "name": "svg-path-mini-tools",
   "version": "0.1.0",
   "description": "A collection of minimalistic SVG path manipulation utilities",
   "type": "module",

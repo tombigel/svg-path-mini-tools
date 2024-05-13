@@ -2,23 +2,15 @@
 
 ## A collection of minimalistic SVG path manipulation utilities
 
-### Based on the work of [@jkroso](https://github.com/jkroso) and [@michaelrhodes](https://github.com/michaelrhodes)  
+### Usage
 
-### Types Based on work from the[DefinitelyTyped](https://github.com/DefinitelyTyped) project
+```js
+import {scalePath} from 'svg-path-mini-tools'
 
-<https://github.com/michaelrhodes/scale-svg-path>  
-<https://github.com/jkroso/serialize-svg-path>  
-<https://github.com/jkroso/parse-svg-path>  
-<https://github.com/jkroso/abs-svg-path>  
-<https://github.com/jkroso/rel-svg-path>  
+const scaled = scalePath('M20, 20 L40, 40 Z', 2, 2) // 'M20,20L40,40Z'
+```
 
-<https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/abs-svg-path>
-
-### License
-
-[MIT](./LICENSE)
-
-### API
+### Methods
 
 #### `parse(path: string): array[]`
 
@@ -47,3 +39,22 @@ Scales the parsed path data by the given `sx` and `sy` factors.
 
 Scales an SVG path by the given `sx` and `sy` factors.  
 The input is a path string, and the output is a similar string but with all points scaled by the given factors.
+
+## License
+
+[MIT](./LICENSE)
+
+## Credits
+
+### Based on the work of [@jkroso](https://github.com/jkroso) and [@michaelrhodes](https://github.com/michaelrhodes)
+
+### Types Based on work from the [DefinitelyTyped](https://github.com/DefinitelyTyped) project  
+
+<https://github.com/jkroso/serialize-svg-path>  
+<https://github.com/jkroso/parse-svg-path>  
+<https://github.com/jkroso/abs-svg-path>  
+<https://github.com/jkroso/rel-svg-path>  
+
+<https://github.com/michaelrhodes/scale-svg-path>  
+
+<https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/abs-svg-path>  
