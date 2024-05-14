@@ -2,7 +2,15 @@
 
 ## A collection of minimalistic SVG path manipulation utilities
 
-[![npm version](https://badge.fury.io/js/svg-path-mini-tools.svg)](https://badge.fury.io/js/svg-path-mini-tools)
+### Rationale
+
+For a work project, I needed to scale paths without using on-the-fly transforms. I discovered that almost all SVG manipulation resources are either outdated (8-10 years old) or resemble feature-packed Swiss Army knives.  
+
+So, I began exploring the smallest solutions I could find. This exploration led me to create this compact package. It allows you to parse a path string, convert it to relative or absolute, and scale it.  
+
+**It's less than 2K when minified, and it's fully tested and typed.**  
+
+I'm confident that I'll discover more use cases in the future, leading to additional functionality. However, I'm committed to preventing this from becoming another bloated SVG library.
 
 ### Usage
 
