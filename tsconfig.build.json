@@ -4,5 +4,6 @@
   // name your test files
   "exclude": [
     "**/*.test.ts",
+    "./dist"
   ]
 }
