@@ -1,6 +1,6 @@
 {
   "name": "svg-path-mini-tools",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A collection of minimalistic SVG path manipulation utilities",
   "type": "module",
   "main": "dist/index.js",
