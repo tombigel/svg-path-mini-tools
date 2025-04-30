@@ -1,17 +1,17 @@
-import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  root: 'demo', // Set project root to the demo directory
+  base: '/svg-path-mini-tools/',
   // Config for building the demo app
   build: {
-    outDir: resolve(__dirname, 'demo-dist'), // Output directory for demo build
-    rollupOptions: {
-      input: resolve(__dirname, 'demo/index.html') // Entry point for demo
-    }
+    outDir: '../demo-dist', // Output relative to the new root
+    emptyOutDir: true // Ensure old builds are cleaned
+    // rollupOptions removed, Vite finds index.html in root
   },
   // Server config for development
   server: {
-    open: '/demo/' // Automatically open the demo page
+    open: '/' // Open the root (index.html) relative to the 'demo' root
   }
 })
