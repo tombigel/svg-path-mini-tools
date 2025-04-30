@@ -96,4 +96,5 @@ btnAbsolute.addEventListener('click', () => {
 
 pathInput.addEventListener('input', () => updateDisplay(outputString));
 
+// Initial display - pass the confirmed non-null elements
 updateDisplay(outputString);
