@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>svg-path-mini-tools Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>svg-path-mini-tools Demo</h1>
+
+  <div class="container">
+    <div class="input-section">
+      <label for="pathInput">SVG Path Data (d="..."):</label>
+      <textarea id="pathInput" rows="5">M50,5 L61.8,38.2 L98.2,38.2 L68.2,59.8 L79,92.7 L50,71.8 L21,92.7 L31.8,59.8 L1.8,38.2 L38.2,38.2 Z</textarea>
+
+      <label for="scaleX">Scale X:</label>
+      <input type="number" id="scaleX" value="1.5" step="0.1">
+      <label for="scaleY">Scale Y:</label>
+      <input type="number" id="scaleY" value="0.8" step="0.1">
+
+      <button id="btnScale">Scale</button>
+      <button id="btnRelative">Make Relative</button>
+      <button id="btnAbsolute">Make Absolute</button>
+    </div>
+
+    <div class="output-section">
+      <div class="svg-display">
+        <h2>Original</h2>
+        <svg id="svgOriginal" width="200" height="200" viewBox="0 0 100 100">
+          <path id="pathOriginal" d="" fill="none" stroke="blue" stroke-width="1"></path>
+        </svg>
+      </div>
+      <div class="svg-display">
+        <h2>Transformed</h2>
+        <svg id="svgTransformed" width="200" height="200" viewBox="0 0 100 100">
+          <path id="pathTransformed" d="" fill="none" stroke="red" stroke-width="1"></path>
+        </svg>
+      </div>
+    </div>
+
+    <div class="text-output">
+      <h2>Transformed Path String:</h2>
+      <pre><code id="outputString"></code></pre>
+    </div>
+  </div>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

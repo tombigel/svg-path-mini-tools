@@ -202,3 +202,6 @@ export function absolute(path: PathSegments): AbsSegment[] {
 export function scalePath(path: string, sx: number, sy: number): string {
   return serialize(scaleSegments(parse(path), { sx, sy }));
 }
+
+// Re-export types for consumers
+export * from './types';

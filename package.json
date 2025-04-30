@@ -17,9 +17,11 @@
     "dist"
   ],
   "scripts": {
+    "dev": "vite",
     "lint": "npx eslint ./src",
     "build": "npm run clean && vite build --config vite.lib.config.ts",
-    "clean": "rimraf dist",
+    "build:demo": "vite build",
+    "clean": "rimraf dist demo-dist",
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
@@ -28,8 +30,10 @@
     "version:patch": "npm version patch -m \"chore(release): %s\"",
     "version:minor": "npm version minor -m \"feat(release): %s\"",
     "version:major": "npm version major -m \"feat(release): %s\"",
-    "prepublishOnly": "npm run clean && npm run build",
-    "release": "npm run version:patch && git push --follow-tags origin main && npm publish"
+    "prepublishOnly": "npm run build",
+    "release": "npm run version:patch && git push --follow-tags origin main && npm publish",
+    "predeploy": "npm run build:demo",
+    "deploy": "gh-pages -d demo-dist"
   },
   "repository": {
     "type": "git",
@@ -51,6 +55,7 @@
     "@eslint/js": "^9.2.0",
     "@types/node": "^20.12.11",
     "eslint": "^8.57.0",
+    "gh-pages": "^6.3.0",
     "globals": "^15.2.0",
     "jsdom": "^26.1.0",
     "rimraf": "^6.0.1",
