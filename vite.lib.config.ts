@@ -28,6 +28,7 @@ export default defineConfig({
       // Or adjust if using the main tsconfig.json
       // tsconfigPath: './tsconfig.types.json',
       insertTypesEntry: true, // Create a single index.d.ts entry
+      exclude: ['src/**/*.test.ts'] // Exclude test files from declarations
     })
   ],
 })

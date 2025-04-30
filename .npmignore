@@ -1,0 +1,15 @@
+# Build artifacts (already covered by files array, but explicit is good)
+dist
+
+# Source files to exclude
+src/**/*.test.ts
+
+# Config files
+*.config.js
+*.config.ts
+*.cjs
+
+# Other
+.DS_Store
+coverage
+node_modules
